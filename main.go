@@ -15,7 +15,7 @@ type DateInfo struct {
   Date string
   Date_ja string
   Day int
-  _error string `json:"error"`
+  Error string `json:"error"`
   Eto string
   Eto_kana string
   Gengo string
@@ -74,7 +74,7 @@ func getDateInfo(date string) string {
   var dateInfo = new(DateInfo)
   json.Unmarshal([]byte(body), &dateInfo)
 
-  fmt.Println(dateInfo.Date)
+  fmt.Println(dateInfo)
   return "end"
 }
 
