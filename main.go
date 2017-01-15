@@ -85,6 +85,16 @@ func main() {
   opt := flag.String("d", time.Now().Format(layout), "Set date to know rokuyo")
   flag.Parse()
 
-  dateInfo := getDateInfo(*opt)
-  fmt.Println(*opt+" "+dateInfo.Rokuyo)
+  // check date format
+  t, err := time.Parse(
+    "2006-01-02",
+    *opt)
+  if err != nil {
+    fmt.Println("Error option")
+    fmt.Println("Date layout is "+`%yyyy-%mm-%dd`)
+    return
+  }
+
+  dateInfo := getDateInfo(t.Format(layout))
+  fmt.Println(dateInfo.Date+" "+dateInfo.Rokuyo)
 }
