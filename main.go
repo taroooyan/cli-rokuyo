@@ -6,6 +6,7 @@ import (
   "net/http"
   "io/ioutil"
   "encoding/json"
+  "flag"
 )
 
 // define json
@@ -61,7 +62,7 @@ type Now struct {
   Year int
 }
 
-func getDateInfo(date string) string {
+func getDateInfo(date string) *DateInfo {
   const url = "https://dateinfoapi.appspot.com/v1"
   req, _:= http.NewRequest("GET", url+"?date="+date, nil)
   client := new(http.Client)
@@ -71,16 +72,19 @@ func getDateInfo(date string) string {
 
   body, _ := ioutil.ReadAll(res.Body)
 
-  var dateInfo = new(DateInfo)
+  dateInfo := new(DateInfo)
   json.Unmarshal([]byte(body), &dateInfo)
 
-  fmt.Println(dateInfo)
-  return "end"
+  return dateInfo
 }
 
 func main() {
-  t := time.Now()
   const layout = "2006-01-02"
-  fmt.Println(t.Format(layout))
-  getDateInfo(t.Format(layout))
+
+  // Options
+  opt := flag.String("d", time.Now().Format(layout), "Set date to know rokuyo")
+  flag.Parse()
+
+  dateInfo := getDateInfo(*opt)
+  fmt.Println(*opt+" "+dateInfo.Rokuyo)
 }
